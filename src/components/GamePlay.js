@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import Table from "./Table";
 import PlayerCard from "./PlayerCard";
 import HandCards from './HandCards';
+import { GAME_STATUS } from '../constants/constants';
 
 const Row = ({ children, customStyle }) => {
     return (
@@ -47,13 +48,14 @@ const GamePlay = ({
     }
 
     useEffect(() => {
+        // debugger;
         if (turnPosition === undefined || players === undefined || playerPositions === undefined) return;
         const currentPositionIndex = sessionPositionsIndex[room.sessionId];
-        const totalPositions = 4; 
+        const totalPositions = 4;
         const position2ActualIndex = getNextPositionIndex(currentPositionIndex, totalPositions);
         const position3ActualIndex = getNextPositionIndex(position2ActualIndex, totalPositions);
         const position4ActualIndex = getNextPositionIndex(position3ActualIndex, totalPositions);
-        
+
         const secondPlayerSessionId = playerPositions[position2ActualIndex];
         const thirdPlayerSessionId = playerPositions[position3ActualIndex];
         const fourthPlayerSessionId = playerPositions[position4ActualIndex];
@@ -65,16 +67,18 @@ const GamePlay = ({
             fourthPlayer: players[fourthPlayerSessionId],
         });
     }, [turnPosition, players, playerPositions, sessionPositionsIndex, room?.sessionId]);
-    
-    useEffect(()=>{
-        console.log("PLAYER HAND");
-        console.log(playersState.myPlayer)
-        if(playersState.myPlayer === null) return;
-        
-        
-        setSelectedCards(playersState.myPlayer?.hand);
 
-    },[playersState.myPlayer])
+    useEffect(() => {
+        console.log(playersState.myPlayer)
+        if (playersState.myPlayer === null) return;
+
+        if(gameStatus === GAME_STATUS.SWAPPING){
+            setSelectedCards([]);
+        }else{
+            setSelectedCards(playersState.myPlayer?.hand);
+        }
+
+    }, [playersState.myPlayer])
 
     const buttonDefaultStyle = {
         width: 120,

@@ -1,24 +1,17 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import _server from './server';
+import { GameRulesService } from './testGameRulesService';
+
 import RoomEnter from './components/RoomEnter';
 import WaitingRoom from './components/WaitingRoom';
 import GamePlay from './components/GamePlay';
 import GameOver from './components/GameEnd';
+import { GAME_ACTIONS, GAME_STATUS } from './constants/constants';
 
 import { mapGameSettings, mapPlayers, mapCards } from './mappers';
+import GameStarting from './components/GameStarting';
 
-const GAME_ACTIONS = {
-  PASS: 'PASS',
-  PLAY: "PLAY"
-}
-const GAME_STATUS = {
-  WAITING: "waiting",
-  STARTED: "started",
-  ENDED: "ended",
-  PAUSE: "pause",
-  SWAPING: "swaping",
-}
 
 const GAME_SETTINGS_DEFAULT_STATE = {
   gameStatus: null,
@@ -26,7 +19,7 @@ const GAME_SETTINGS_DEFAULT_STATE = {
   sessionPositionsIndex: {},
   scores: [],
   turnPosition: 0,
-  round:1
+  round: 1
 }
 
 function App() {
@@ -37,14 +30,48 @@ function App() {
   const [selectedCards, setSelectedCards] = useState([]);
   const [tableCards, setTableCards] = useState([]);
   // New
-  const [gameSettings, setGameSettings] = useState(GAME_SETTINGS_DEFAULT_STATE)
+  const [gameSettings, setGameSettings] = useState(GAME_SETTINGS_DEFAULT_STATE);
+
+  // useEffect(() => {
+  //   const deckCards = [
+  //     { id: 1, name: '2', suit: 'Hearts', value: 13 },
+  // ];
+
+  // const playerCards = [
+  //   { id: 36, name: 'Ace', suit: 'Hearts', value: 12 },
+  //   { id: 1, name: '2', suit: 'Hearts', value: 13 },
+  //   { id: 2, name: '3', suit: 'Hearts', value: 1 },
+  //   { id: 3, name: '4', suit: 'Hearts', value: 2 },
+  //   { id: 4, name: '5', suit: 'Hearts', value: 3 },
+  //   { id: 5, name: '6', suit: 'Hearts', value: 4 },
+  //   { id: 6, name: '7', suit: 'Hearts', value: 5 },
+  //   { id: 7, name: '8', suit: 'Hearts', value: 6 },
+  //   { id: 8, name: '9', suit: 'Hearts', value: 7 },
+  //   { id: 9, name: '10', suit: 'Hearts', value: 8 },
+  //   { id: 10, name: 'Jack', suit: 'Hearts', value: 9 },
+  //   { id: 11, name: 'Queen', suit: 'Hearts', value: 10 },
+  //   { id: 12, name: 'King', suit: 'Hearts', value: 11 },
+  //   { id: 13, name: 'Ace', suit: 'Hearts', value: 12 },
+  //   { id: 14, name: '2', suit: 'Diamonds', value: 13 },
+  //   { id: 15, name: '3', suit: 'Diamonds', value: 1 },
+  //   { id: 16, name: '4', suit: 'Diamonds', value: 2 },
+  //   { id: 17, name: '5', suit: 'Diamonds', value: 3 },
+  //   { id: 18, name: '6', suit: 'Diamonds', value: 4 },
+  //   { id: 19, name: '7', suit: 'Diamonds', value: 5 },
+  //   { id: 20, name: '8', suit: 'Diamonds', value: 6 },
+  //   { id: 21, name: '9', suit: 'Diamonds', value: 7 },
+  //   { id: 22, name: '10', suit: 'Diamonds', value: 8 },
+  //   { id: 23, name: 'Jack', suit: 'Diamonds', value: 9 },
+  //   { id: 24, name: 'Queen', suit: 'Diamonds', value: 10 },
+  //   { id: 25, name: 'King', suit: 'Diamonds', value: 11 },
+  //   { id: 26, name: 'Ace', suit: 'Diamonds', value: 12 },
+  // ];
 
 
-  const SERVER_AUTOMATIC_ACTION_TYPES = {
-    PASS: 'PASS',
-    PLAY_3_MATCH: "PLAY_3_MATCH",
-    WIN: "WIN"
-  }
+  //   const response = GameRulesService.adjustAceAndTwoValueIfNeeded(playerCards);
+  //   console.log("RESPONSE:", response);
+
+  // }, [])
 
   const saveReconnectionToken = (token) => {
     sessionStorage.setItem('cachedReconnectionToken', token);
@@ -97,19 +124,10 @@ function App() {
     room.onError(onErrorRoomListener);
     room.onLeave(onLeaveListener);
 
-    // room.onMessage(SERVER_AUTOMATIC_ACTION_TYPES.PLAY_3_MATCH, (message) => {
-    //   console.log("PLAYER MATCH:", message);
-    //   room.send(GAME_ACTIONS.PLAY, {
-    //     cards: [
-    //       {
-    //         id: 41,
-    //         name: "3",
-    //         suit: "Spades",
-    //         value: 2,
-    //       }
-    //     ]
-    //   });
-    // }}
+    room.onMessage(GAME_ACTIONS.SWAPPED, (message) => {
+      console.log("SWAPPED");
+      console.log(message);
+    })
 
     setSelectedCards([]);
     setRoom(room)
@@ -195,17 +213,26 @@ function App() {
         </div>
       }
       {gameSettings.gameStatus === GAME_STATUS.WAITING &&
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }} >
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}>
           <WaitingRoom waitingRoomPlayers={waitingRoomPlayers} />
         </div>
       }
-      {(gameSettings.gameStatus === GAME_STATUS.STARTED || gameSettings.gameStatus ===  GAME_STATUS.SWAPING) &&
+      {gameSettings.gameStatus === GAME_STATUS.STARTING &&
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}>
+          <GameStarting />
+        </div>
+      }
+      {(gameSettings.gameStatus === GAME_STATUS.PLAYING || gameSettings.gameStatus === GAME_STATUS.SWAPPING) &&
         <GamePlay
           gameStatus={gameSettings.gameStatus}
           selectedCards={selectedCards}
@@ -222,8 +249,15 @@ function App() {
           tableCards={tableCards}
         />
       }
-      {gameSettings.gameStatus === GAME_STATUS.ENDED &&
-        <GameOver scores={gameSettings.scores} />
+      {gameSettings.gameStatus === GAME_STATUS.ROUND_END &&
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}>
+          <GameOver scores={gameSettings.scores} />
+        </div>
       }
     </div>
   );

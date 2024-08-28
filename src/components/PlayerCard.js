@@ -1,6 +1,7 @@
-import { PlayerStateEnum } from "../constants/playerStatuses";
+import { PlayerStateEnum } from "../constants/constants";
 
 const PlayerCard = ({ onClickLeave, username, isReconnecting, itsMe, isYourTurn, sessionId, status }) => {
+    console.log(username, isReconnecting, itsMe, isYourTurn, sessionId, status);
 
     if (
         status === PlayerStateEnum.DISCONNECTED ||

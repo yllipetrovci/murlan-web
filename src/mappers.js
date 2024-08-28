@@ -6,8 +6,8 @@ export const mapPlayers = (players) => {
             id: player.id,
             username: player.username,
             score: player.score,
-            connected: player.connected,
-            isReconnecting: player.isReconnecting,
+            // connected: player.connected,
+            // isReconnecting: player.isReconnecting,
             sessionId: key,
             status:player.status,
             hand: mapCards(player.hand)
@@ -15,7 +15,8 @@ export const mapPlayers = (players) => {
         tempPlayers.push(playerObj);
         objTempPlayer = { ...objTempPlayer, [key]: playerObj };
     });
-
+    console.log('mapPlayers');
+    console.log({players: objTempPlayer, waitingRoomPlayers: tempPlayers})
     return {players: objTempPlayer, waitingRoomPlayers: tempPlayers};
 }
 
