@@ -1,5 +1,6 @@
 import { Client } from "colyseus.js";
 import { config } from "./config";
+import { GAME_TYPES } from "./constants/constants";
 
 class Server {
     client;
@@ -10,9 +11,24 @@ class Server {
         console.log(this.client);
     }
 
-    async join(username) {
-        this.currentRoom = await this.client.joinOrCreate(config.ROOM_NAME, {
-            username: username
+    async joinRoom(roomID, data) {
+        this.currentRoom = await this.client.joinById(roomID, {
+            token: data.token,
+            type: data.type,
+            tierId: data.selectedTire,
+            betId: data.betId,
+            teamId: data.teamId || null
+        });
+
+        return this.currentRoom;
+    };
+
+    async joinOrCreate(roomName, data) {
+        this.currentRoom = await this.client.joinOrCreate(roomName || GAME_TYPES.GAME_21, {
+            token: data.token,
+            type: data.type,
+            tierId: data.selectedTire,
+            betId: data.betId
         });
 
         return this.currentRoom;
@@ -50,17 +66,6 @@ class Server {
             console.error("join error", e);
         }
     }
-
-   /*  async joinByConsumeSeatReservation() {
-        try {
-            this.currentRoom = await this.client.consumeSeatReservation();
-            console.log("joined successfully", this.room);
-
-        } catch (e) {
-            console.error("join error", e);
-        }
-    } */
-
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

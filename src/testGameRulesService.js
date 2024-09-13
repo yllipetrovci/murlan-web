@@ -19,30 +19,38 @@ export class GameRulesService {
     }
 
     static adjustAceAndTwoValueIfNeeded(cards) {
-        const ADJUST_POWER_VALUE = { Ace: -1, "2": 0 };
+        const ADJUST_POWER_VALUE = { ACE: -1, "2": 0 };
 
         const hasKing = cards.some(card => card.name === "King");
         const aceIndex = cards.findIndex(card => card.name === "Ace");
+        const aceCards = cards.filter(card => card.name === "Ace");
+
         const twoIndex = cards.findIndex(card => card.name === "2");
 
         if (!hasKing) {
             if (twoIndex !== -1) {
-                cards[twoIndex].value = 0;
+                cards[twoIndex].value = ADJUST_POWER_VALUE[2];
             }
             if (aceIndex !== -1) {
                 // Adjust Ace to be lowest if no King is present
-                cards[aceIndex].value = -1;
+                cards[aceIndex].value = ADJUST_POWER_VALUE.ACE;
             }
         } else {
-            if (aceIndex !== -1) {
-                // If there are multiple Aces and a King, set one Ace to lowest
-                cards[aceIndex].value = -1; // Keep one Ace high
+            if (aceCards.length > 1) {
+                if (aceIndex !== -1) {
+                    cards[aceIndex].value = -1; // Keep one Ace high
+                }
+
             }
-            if (twoIndex !== -1) {
+            if (twoIndex !== -1 && aceCards.length > 1) {
                 // With King present, '2' retains its high value
                 cards[twoIndex].value = ADJUST_POWER_VALUE[2]; // Keep one Ace high
             }
         }
+
+
+        cards = cards.sort((a, b) => a.value - b.value);
+
 
         return cards;
     }
@@ -112,6 +120,10 @@ export class GameRulesService {
         // Check if either set is a kolor
         const deckCardsIsKolor = this.isKolor(deckCards);
         const playerCardsIsKolor = this.isKolor(playerCards);
+
+        if(playerCardsIsKolor){
+            playerCards = this.adjustAceAndTwoValueIfNeeded(playerCards);
+        }
 
         // Kolor rules
         if (deckCardsIsKolor) {

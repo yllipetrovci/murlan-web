@@ -1,6 +1,7 @@
 export const mapPlayers = (players) => {
     let tempPlayers = [];
     let objTempPlayer = {}
+
     players.forEach((player, key) => {
         const playerObj = {
             id: player.id,
@@ -9,7 +10,9 @@ export const mapPlayers = (players) => {
             // connected: player.connected,
             // isReconnecting: player.isReconnecting,
             sessionId: key,
+            emoji: player.emoji,
             status:player.status,
+            teamId:player.teamId,
             hand: mapCards(player.hand)
         }
         tempPlayers.push(playerObj);

@@ -22,6 +22,7 @@ const Position = ({ pos, children }) => {
 }
 
 const GamePlay = ({
+    handleOnChangeEmojiSelection,
     selectedCards,
     sessionPositionsIndex,
     playerPositions,
@@ -48,7 +49,6 @@ const GamePlay = ({
     }
 
     useEffect(() => {
-        // debugger;
         if (turnPosition === undefined || players === undefined || playerPositions === undefined) return;
         const currentPositionIndex = sessionPositionsIndex[room.sessionId];
         const totalPositions = 4;
@@ -72,9 +72,9 @@ const GamePlay = ({
         console.log(playersState.myPlayer)
         if (playersState.myPlayer === null) return;
 
-        if(gameStatus === GAME_STATUS.SWAPPING){
+        if (gameStatus === GAME_STATUS.SWAPPING) {
             setSelectedCards([]);
-        }else{
+        } else {
             setSelectedCards(playersState.myPlayer?.hand);
         }
 
@@ -104,6 +104,7 @@ const GamePlay = ({
                 <Row customStyle={{ justifyContent: 'center' }}>
                     <Position pos={3}>
                         <PlayerCard
+                            handleOnChangeEmojiSelection={handleOnChangeEmojiSelection}
                             isYourTurn={thirdPlayer?.sessionId === turnPosition}
                             onClickLeave={onClickLeave}
                             itsMe={thirdPlayer?.sessionId === room.sessionId}
@@ -118,6 +119,7 @@ const GamePlay = ({
                 }}>
                     <Position pos={2}>
                         <PlayerCard
+                            handleOnChangeEmojiSelection={handleOnChangeEmojiSelection}
                             isYourTurn={secondPlayer?.sessionId === turnPosition}
                             onClickLeave={onClickLeave}
                             itsMe={secondPlayer?.sessionId === room.sessionId}
@@ -128,6 +130,7 @@ const GamePlay = ({
                     <Table cards={tableCards} />
                     <Position pos={4}>
                         <PlayerCard
+                            handleOnChangeEmojiSelection={handleOnChangeEmojiSelection}
                             isYourTurn={fourthPlayer?.sessionId === turnPosition}
                             onClickLeave={onClickLeave}
                             itsMe={fourthPlayer?.sessionId === room.sessionId}
@@ -139,6 +142,7 @@ const GamePlay = ({
                 <Row customStyle={{ justifyContent: 'center' }}>
                     <Position pos={1}>
                         <PlayerCard
+                            handleOnChangeEmojiSelection={handleOnChangeEmojiSelection}
                             isYourTurn={myPlayer?.sessionId === turnPosition}
                             onClickLeave={onClickLeave}
                             itsMe={myPlayer?.sessionId === room.sessionId}

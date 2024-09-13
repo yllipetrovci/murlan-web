@@ -56,6 +56,19 @@ describe('(NOT VALID MOVE) SINGLE', () => {
         const response = GameRulesService.isValidMove(deckCards, playerCards);
         expect(response).toBeFalsy();
     })
+
+    test('deckCards: King| playerCards: King', () => {
+        const deckCards = [
+            { id: 1, name: 'King', suit: 'Hearts', value: 11 },
+
+        ];
+        const playerCards = [
+            { id: 12, name: 'King', suit: 'Hearts', value: 11 },
+        ];
+
+        const response = GameRulesService.isValidMove(deckCards, playerCards);
+        expect(response).toBeFalsy();
+    })
 });
 
 

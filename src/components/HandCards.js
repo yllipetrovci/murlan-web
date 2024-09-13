@@ -5,7 +5,6 @@ const HandCards = ({ player, selectedCards, onClickCard, isYourTurn }) => {
         Hearts: "♥", Diamonds: "♦", Clubs: "♣", Spades: "♠"
     }
 
-    // debugger;
     console.log('HandCards');
     console.log(player);
     return (
