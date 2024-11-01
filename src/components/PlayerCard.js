@@ -1,7 +1,10 @@
 import { PlayerStateEnum } from "../constants/constants";
 
-const PlayerCard = ({ handleOnChangeEmojiSelection, onClickLeave, username,emoji, isReconnecting, itsMe, isYourTurn, sessionId, status }) => {
-    console.log(username, isReconnecting, itsMe, isYourTurn, sessionId, status);
+const PlayerCard = ({ 
+    handleOnSubmitTeamId,
+    handleOnChangeEmojiSelection, onClickLeave, username,emoji, isReconnecting, itsMe, isYourTurn, sessionId, connectionStatus,matchResult }) => {
+    // console.log("PLAYER CARD");
+    // console.log(username, isReconnecting, itsMe, isYourTurn, sessionId);
 
     const emojis = [
         "",
@@ -19,25 +22,28 @@ const PlayerCard = ({ handleOnChangeEmojiSelection, onClickLeave, username,emoji
         "emoji12",
     ]
 
+    
     if (
-        status === PlayerStateEnum.DISCONNECTED ||
-        status === PlayerStateEnum.LOST ||
-        status === PlayerStateEnum.WON) {
-        return (
-            <div style={{ border: itsMe ? '1px solid red' : '1px solid black', width: 100, minHeight: 100, margin: 15, padding: 5, position: 'relative' }}>
-                <h1>{status}</h1>
+        matchResult === PlayerStateEnum.LOST ||
+        matchResult === PlayerStateEnum.WON) {
+            return (
+                <div style={{ border: itsMe ? '1px solid red' : '1px solid black', width: 100, minHeight: 100, margin: 15, padding: 5, position: 'relative' }}>
+                <h1>{matchResult}</h1>
+                <h2>Connection Status: {connectionStatus}</h2>
             </div>
         )
-
+        
     }
-
-    if (isReconnecting) {
+    
+    if(connectionStatus === PlayerStateEnum.RECONNECTING || connectionStatus === PlayerStateEnum.DISCONNECTED){
         return (
             <div style={{ border: itsMe ? '1px solid red' : '1px solid black', width: 100, minHeight: 100, margin: 15, padding: 5, position: 'relative' }}>
-                <p>isReconnecting...</p>
+                <p>{connectionStatus}</p>
             </div>
         )
     }
+
+
     return (
         <div style={{ border: itsMe ? '1px solid red' : '1px solid black', width: 120, minHeight: 120, margin: 15, padding: 5, position: 'relative' }}>
             {isYourTurn && <div style={{ borderRadius: 50, border: '1px solid green', width: 10, height: 10, backgroundColor: 'green', position: 'absolute' }} />}

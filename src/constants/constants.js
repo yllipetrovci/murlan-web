@@ -14,7 +14,8 @@ export const GAME_ACTIONS = {
     SWAPPED: "SWAPPED",
     INVALID_ACTION: 'INVALID_ACTION',
     INFO: "INFO",
-    EMOJI: 'EMOJI'
+    EMOJI: 'EMOJI',
+    CHOOSE_TEAM: 'CHOOSE_TEAM'
 }
 
 export const GAME_STATUS = {
@@ -27,10 +28,14 @@ export const GAME_STATUS = {
 };
 
 export const GAME_TYPES = {
+    PRIVATE_GAME_21: "private_game_21",
+    PRIVATE_SINGLE_GAME: "private_single_game",
     GAME_21: "game_21",
     SINGLE_GAME: "single_game",
     GAME_21_2V2: "game_21_2v2",
-    SINGLE_GAME_2V2: "single_game_2v2"
+    SINGLE_GAME_2V2: "single_game_2v2",
+    PRIVATE_GAME_2V2: "private_game_2v2",
+    PRIVATE_SINGLE_GAME_2V2: "private_single_game_2v2",
 }
 
 export const TIERS = [

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 
 const HandCards = ({ player, selectedCards, onClickCard, isYourTurn }) => {
     const cardIcons = {

@@ -11,7 +11,8 @@ export const mapPlayers = (players) => {
             // isReconnecting: player.isReconnecting,
             sessionId: key,
             emoji: player.emoji,
-            status:player.status,
+            connectionStatus:player.connectionStatus,
+            matchResult:player.matchResult,
             teamId:player.teamId,
             hand: mapCards(player.hand)
         }

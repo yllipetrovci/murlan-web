@@ -1,7 +1,7 @@
 const JoinButton = ({ onClickJoin }) => {
     return (
         <button style={{ marginTop: 20 }} onClick={onClickJoin}>
-            Join
+            Create or Join 
         </button>
     );
 };

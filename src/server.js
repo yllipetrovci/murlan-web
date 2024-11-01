@@ -17,7 +17,8 @@ class Server {
             type: data.type,
             tierId: data.selectedTire,
             betId: data.betId,
-            teamId: data.teamId || null
+            teamId: data?.teamId || null,
+            invitedFromId: data?.invitedFromId || null
         });
 
         return this.currentRoom;
@@ -28,7 +29,7 @@ class Server {
             token: data.token,
             type: data.type,
             tierId: data.selectedTire,
-            betId: data.betId
+            betId: data.betId,
         });
 
         return this.currentRoom;

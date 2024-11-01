@@ -15,7 +15,10 @@ const RoomEnter = ({
     onClickJoin,
     gameType,
     handleGameType,
-    invitedRoomId
+    invitedRoomId,
+    privateRoomJoinId,
+    setPrivateRoomJoinId,
+    onClickJoinRoom
 }) => {
 
     const hasReconnection = sessionStorage.getItem('cachedReconnectionToken');
@@ -24,6 +27,11 @@ const RoomEnter = ({
         <div style={{ border: '1px solid black', width: 800, padding: 30 }}>
             <h2>Game {room?.hasJoined ? "Joined" : "Join"}</h2>
             {room && <p>Room ID: {room.roomId}</p>}
+            <div>
+                <input placeholder="JOIN PRIVATE ROOM" value={privateRoomJoinId} onChange={(e) => { setPrivateRoomJoinId(e.target.value) }} />
+                <button onClick={onClickJoinRoom}>Join private room</button>
+            </div>
+            <hr />
 
             {!room && <UsernameInput username={username} onChangeUsernameHandle={onChangeUsernameHandle} />}
             {!invitedRoomId && <>
